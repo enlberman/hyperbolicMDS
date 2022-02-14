@@ -174,11 +174,9 @@ def line_search(Z, dissimilarities, g, r0, rmax, verbose=False):
 
 class HyperMDS():
 
-    def __init__(self, dim=2, max_iter=3, verbose=0, eps=1e-5, alpha=1, save_metrics=False,
+    def __init__(self, verbose=0, eps=1e-5, alpha=1, save_metrics=False,
                  random_state=None, dissimilarity="euclidean", dims=3, start_embed=None):
-        self.dim = dim
         self.dissimilarity = dissimilarity
-        self.max_iter = max_iter
         self.alpha = alpha
         self.eps = eps
         self.dims = dims
@@ -198,7 +196,7 @@ class HyperMDS():
     def compute_gradients(self):
         self.gradients = sammon_stress_grad_vec(self.embedding, self.dissimilarity_matrix, alpha=self.alpha)
 
-    def fit(self, X, init=None):
+    def fit(self, X):
         """
         Uses gradient descent to find the embedding configuration in the Poincaré disk
         Parameters
@@ -208,11 +206,11 @@ class HyperMDS():
             be the dissimilarity matrix.
         init: initial configuration of the embedding coordinates
         """
-        self.fit_transform(X, init=init)
+        self.fit_transform(X)
         return self
 
     def init_embed(self, rmax, rmin):
-        random_config = np.random.uniform(-rmax, rmax, size=(self.n, self.dim))
+        random_config = np.random.uniform(-rmax, rmax, size=(self.n, self.dims))
         r = np.random.uniform(rmin, rmax, size=self.n)
         random_config = (random_config.T / (random_config ** 2).sum(1) * r).T
         self.embedding = random_config
