@@ -191,6 +191,7 @@ class HyperMDS():
             self.steps = []
             self.rel_steps = []
             self.losses = []
+            self.best_embedding = None
 
     def loss_fn(self):
         self.loss = sammon_stress_vec(self.embedding, self.dissimilarity_matrix, alpha=self.alpha)
@@ -266,6 +267,7 @@ class HyperMDS():
             # break if loss decrease < tolerance
             self.loss_fn()
             losses.append(self.loss)
+
             if i > self.check_idx:
                 if numpy.diff(losses[-self.stop_idx:]).mean() > 0:
                     break
@@ -298,6 +300,8 @@ class HyperMDS():
                 self.gradient_norms.append(norm(self.gradients, axis=1).max())
                 # self.steps.append(r)
                 # self.rel_steps.append(r / rmax)
+                if self.loss == min(losses):
+                    self.best_embedding = self.embedding
                 self.losses.append(self.loss)
 
             if verbose & ((i % 50) == 0):
