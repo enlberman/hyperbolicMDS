@@ -175,7 +175,7 @@ def line_search(Z, dissimilarities, g, r0, rmax, verbose=False):
 class HyperMDS():
 
     def __init__(self, verbose=0, eps=1e-5, alpha=1, save_metrics=False,
-                 random_state=None, dissimilarity="euclidean", dims=3, start_embed=None):
+                 random_state=None, dissimilarity="euclidean", dims=3, start_embed=None,stop_idx=5000,check_idx=5000):
         self.dissimilarity = dissimilarity
         self.alpha = alpha
         self.eps = eps
@@ -184,6 +184,8 @@ class HyperMDS():
         self.random_state = random_state
         self.save_metrics = save_metrics
         self.start_embed = start_embed
+        self.stop_idx = 5000
+        self.check_idx = 5000
         if self.save_metrics:
             self.gradient_norms = []
             self.steps = []
@@ -264,8 +266,8 @@ class HyperMDS():
             # break if loss decrease < tolerance
             self.loss_fn()
             losses.append(self.loss)
-            if i > 5000:
-                if numpy.diff(losses[-5000:]).mean() > 0:
+            if i > self.check_idx:
+                if numpy.diff(losses[-self.stop_idx:]).mean() > 0:
                     break
             # if (prev_loss - self.loss) < 1e-11:
             #     break
