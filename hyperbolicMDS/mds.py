@@ -184,8 +184,8 @@ class HyperMDS():
         self.random_state = random_state
         self.save_metrics = save_metrics
         self.start_embed = start_embed
-        self.stop_idx = 5000
-        self.check_idx = 5000
+        self.stop_idx = stop_idx
+        self.check_idx = check_idx
         if self.save_metrics:
             self.gradient_norms = []
             self.steps = []
