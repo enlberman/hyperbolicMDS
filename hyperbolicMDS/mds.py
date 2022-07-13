@@ -283,12 +283,12 @@ class HyperMDS():
             beta1 = beta1 ** (np.sqrt(i + 1))
             beta2 = beta2 ** (np.sqrt(i + 1))
             alpha = alpha * np.sqrt(1 - beta2) / (1 - beta1)
-            m = beta1 * m_prev + (1 - beta1) * self.gradients
-            v = beta2 * v_prev + (1 - beta2) * self.gradients ** 2
+            m = einstein_multiplication(self.gradients,beta1 * m_prev + (1 - beta1), rmax)
+            v = einstein_multiplication(self.gradients ** 2, beta2 * v_prev + (1 - beta2), rmax)
             m_prev = m
             v_prev = v
             gn = norm(self.gradients, axis=1).max()
-            delta = alpha * m / (np.sqrt(v) + eps * gn)
+            delta = einstein_multiplication(m / (np.sqrt(v) + eps * gn), alpha, rmax)
             tmp = mobius_addition(self.embedding, - delta, rmax)
             tmp_norm = norm(tmp, 1)
             tmp[tmp_norm < rmin, :] = (tmp[tmp_norm < rmin, :].T / tmp_norm[tmp_norm < rmin] * rmin).T
