@@ -272,12 +272,10 @@ class HyperMDS():
             if i > self.check_idx:
                 if numpy.diff(losses[-self.stop_idx:]).mean() > 0:
                     break
-            # if (prev_loss - self.loss) < 1e-11:
-            #     break
             if i > 50:
-                pct_chng = numpy.abs(numpy.diff(losses[-50:])) / losses[-50:-1]
-                pct_chng = pct_chng.mean()
-                if pct_chng < tol:
+                chng = numpy.abs(numpy.diff(losses[-50:]))
+                chng = chng.mean()
+                if chng < tol:
                     break
             prev_loss = self.loss
             self.compute_gradients()
