@@ -1,6 +1,7 @@
 import numpy
 import numpy as np
 from sklearn.metrics import euclidean_distances
+from gyrovector import mobius_addition,einstein_multiplication
 
 
 # define helper functions
@@ -289,7 +290,8 @@ class HyperMDS():
             m_prev = m
             v_prev = v
             gn = norm(self.gradients, axis=1).max()
-            tmp = self.embedding - alpha * m / (np.sqrt(v) + eps * gn)
+            delta = alpha * m / (np.sqrt(v) + eps * gn)
+            tmp = mobius_addition(self.embedding, - delta)
             tmp_norm = norm(tmp, 1)
             tmp[tmp_norm < rmin, :] = (tmp[tmp_norm < rmin, :].T / tmp_norm[tmp_norm < rmin] * rmin).T
             tmp[tmp_norm > rmax, :] = (tmp[tmp_norm > rmax, :].T / tmp_norm[tmp_norm > rmax] * rmax).T
