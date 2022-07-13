@@ -289,7 +289,7 @@ class HyperMDS():
             v_prev = v
             gn = norm(self.gradients, axis=1).max()
             delta = alpha * m / (np.sqrt(v) + eps * gn)
-            tmp = mobius_addition(self.embedding, - delta)
+            tmp = mobius_addition(self.embedding, - delta, rmax)
             tmp_norm = norm(tmp, 1)
             tmp[tmp_norm < rmin, :] = (tmp[tmp_norm < rmin, :].T / tmp_norm[tmp_norm < rmin] * rmin).T
             tmp[tmp_norm > rmax, :] = (tmp[tmp_norm > rmax, :].T / tmp_norm[tmp_norm > rmax] * rmax).T
