@@ -1,7 +1,6 @@
 import numpy
 import numpy as np
 from sklearn.metrics import euclidean_distances
-from gyrovector import mobius_addition,einstein_multiplication
 
 
 # define helper functions
