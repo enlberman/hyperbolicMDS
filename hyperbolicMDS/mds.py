@@ -282,8 +282,8 @@ class HyperMDS():
             beta1 = beta1 ** (np.sqrt(i + 1))
             beta2 = beta2 ** (np.sqrt(i + 1))
             alpha = alpha * np.sqrt(1 - beta2) / (1 - beta1)
-            m = einstein_multiplication(self.gradients,beta1 * m_prev + (1 - beta1), rmax)
-            v = einstein_multiplication(self.gradients ** 2, beta2 * v_prev + (1 - beta2), rmax)
+            m = einstein_multiplication(self.gradients.T, beta1 * m_prev + (1 - beta1), rmax).T
+            v = einstein_multiplication(self.gradients.T ** 2, beta2 * v_prev + (1 - beta2), rmax).T
             m_prev = m
             v_prev = v
             gn = norm(self.gradients, axis=1).max()
